@@ -47,18 +47,14 @@ export default function Navbar({ scrolled, activeSection, onNav }: NavbarProps) 
           onClick={() => handleNav('hero')}
           aria-label="Scroll to top"
           className={[
-            'cursor-none relative',
-            'font-[var(--font-display)] font-extrabold text-base tracking-[0.22em] uppercase',
-            'text-[var(--color-accent)] bg-transparent border-0 p-0',
-            'transition-colors duration-[250ms]',
-            'after:absolute after:bottom-[-3px] after:left-0 after:right-0',
-            'after:h-px after:bg-[var(--color-accent)]',
-            'after:scale-x-0 after:origin-left',
-            'after:transition-transform after:duration-[400ms]',
+            'cursor-none relative bg-transparent border-0 p-0',
+            'font-[var(--font-display)] font-extrabold text-base uppercase text-[var(--color-accent)]',
+            'after:absolute after:left-0 after:right-0 after:bottom-[-3px] after:h-px after:bg-[var(--color-accent)]',
+            'after:scale-x-0 after:origin-left after:transition-transform after:duration-[250ms]',
             'hover:after:scale-x-100',
           ].join(' ')}
         >
-          Axiom
+          Mick W
         </button>
 
         {/* Desktop links */}
