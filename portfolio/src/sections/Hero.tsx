@@ -222,17 +222,6 @@ export default function Hero({ onScrollDown }: HeroProps) {
             Get in Touch
           </button>
         </div>
-
-        {/* Status badge */}
-        <div className="anim-fade-up anim-d5 flex items-center gap-2 mt-2">
-          <span
-            className="inline-block w-1.5 h-1.5 rounded-full bg-[var(--color-electric)] shrink-0 animate-[breathe_2.5s_ease-in-out_infinite]"
-            aria-hidden="true"
-          />
-          <span className="font-[var(--font-mono)] text-2xs font-light tracking-wider uppercase text-[var(--color-text-secondary)]">
-            Available for projects — Q3 2025
-          </span>
-        </div>
       </div>
 
       {/* Scroll hint */}
