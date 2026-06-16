@@ -31,7 +31,7 @@ const PROJECTS: Project[] = [
   {
     title: 'Luminate',
     desc: 'A community-driven platform that re-imagines online art challenges as inspiring creative experiences.',
-    tags: ['WebGPU', 'WGSL', 'Three.js'],
+    tags: ['Figma', 'UI/UX Design', 'Web Development'],
     prdImages: [luminate1, luminate2],
     prdAlt: 'Luminate document',
   },
