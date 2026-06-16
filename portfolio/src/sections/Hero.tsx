@@ -57,18 +57,7 @@ export default function Hero({ onScrollDown }: HeroProps) {
       color: 0xe8d5b0, size: 0.09, transparent: true, opacity: 0.55, sizeAttenuation: true,
     })))
 
-    // Central icosahedron
-    const icoGeo  = new THREE.IcosahedronGeometry(5.2, 1)
-    const ico     = new THREE.Mesh(icoGeo, new THREE.MeshStandardMaterial({
-      color: 0x121008, emissive: 0x0d0905, roughness: 0.15, metalness: 0.95,
-    }))
-    ico.castShadow = true
-    scene.add(ico)
 
-    const icoWire = new THREE.Mesh(icoGeo, new THREE.MeshBasicMaterial({
-      color: 0xe8d5b0, wireframe: true, transparent: true, opacity: 0.1,
-    }))
-    scene.add(icoWire)
 
     // Orbiters
     const orbiterGroups: THREE.Group[] = []
@@ -132,10 +121,6 @@ export default function Hero({ onScrollDown }: HeroProps) {
       frameId  = requestAnimationFrame(animate)
       elapsed += 0.008
 
-      ico.rotation.y      += 0.002
-      ico.rotation.x      += 0.001
-      icoWire.rotation.copy(ico.rotation)
-
       orbiterGroups.forEach((group, i) => {
         const cfg = ORBITERS[i]
         const q   = new THREE.Quaternion().setFromAxisAngle(cfg.axis, elapsed * cfg.speed + cfg.phase)
@@ -171,7 +156,7 @@ export default function Hero({ onScrollDown }: HeroProps) {
   return (
     <section
       id="hero"
-      className="relative w-full h-dvh min-h-[600px] flex items-center justify-center overflow-hidden"
+      className="relative w-full h-dvh min-h-150 flex items-center justify-center overflow-hidden"
       aria-label="Hero"
     >
       {/* Three.js canvas */}
@@ -188,23 +173,23 @@ export default function Hero({ onScrollDown }: HeroProps) {
       <div className="relative z-10 flex flex-col items-center text-center gap-6 px-[clamp(1.5rem,4vw,3rem)] max-w-225">
 
         <p className="anim-fade-up anim-d1 font-light text-2xs tracking-label uppercase text-electric">
-          Software · 3D Modeling · Product Design
+          Software · Cybersecurity · Product Design
         </p>
 
-        <p className="anim-fade-up anim-d3 font-light text-md leading-[1.7] tracking-wide text-text-secondary max-w-120">
-          Crafting digital experiences at the intersection of code, form,
-          and imagination — from pixel-perfect software to print-ready sculpture.
+        <p className="anim-fade-up anim-d3 font-light text-md tracking-wide text-text-secondary max-w-120">
+          Turning ideas into products through code, design, and curiosity.
+
         </p>
 
         {/* Actions */}
         <div className="anim-fade-up anim-d4 flex gap-4 flex-wrap justify-center mt-2">
           <button
-            onClick={() => document.getElementById('software')?.scrollIntoView({ behavior: 'smooth' })}
+            onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
             className={[
-              'cursor-none font-[var(--font-display)] text-[0.6875rem] font-bold tracking-[0.12em] uppercase',
-              'px-10 py-4 rounded-[2px] bg-[var(--color-accent)] text-[var(--color-text-inverse)] border-0',
-              'transition-all duration-[250ms]',
-              'hover:bg-[var(--color-text-primary)] hover:scale-[1.02] active:scale-[0.97]',
+              'cursor-none text-[0.6875rem] font-bold tracking-wider uppercase',
+              'px-8 py-3 rounded-xs bg-accent text-(--color-text-inverse) border-0',
+              'transition-all duration-250',
+              'hover:bg-text-primary hover:scale-[1.02] active:scale-[0.97]',
             ].join(' ')}
           >
             View Work
@@ -213,7 +198,7 @@ export default function Hero({ onScrollDown }: HeroProps) {
             onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
             className={[
               'cursor-none text-[0.6875rem] font-medium tracking-wider uppercase',
-              'px-10 py-4 rounded-xs bg-transparent text-[var(--color-text-secondary)]',
+              'px-8 py-3 rounded-xs bg-transparent text-text-secondary',
               'border border-border-mid',
               'transition-all duration-250',
               'hover:text-text-primary hover:border-border-strong active:scale-[0.97]',
@@ -235,17 +220,17 @@ export default function Hero({ onScrollDown }: HeroProps) {
           'transition-opacity duration-250 hover:opacity-70',
         ].join(' ')}
       >
-        <span className="font-(--font-mono) text-2xs font-light tracking-[0.28em] uppercase text-[var(--color-text-secondary)]">
+        <span className="text-2xs font-light tracking-label uppercase text-text-secondary">
           Scroll
         </span>
         <span
-          className="block w-px h-12 bg-gradient-scroll animate-[scrollPulse_2.4s_ease-in-out_infinite]"
+          className="block w-px h-12 bg-gradient-scroll animate-scroll-pulse"
           aria-hidden="true"
         />
       </button>
 
       {/* Corner metadata */}
-      <span className="hidden md:block absolute bottom-10 right-[clamp(1.5rem,4vw,3rem)] z-10 font-[var(--font-mono)] text-[0.625rem] font-light tracking-[0.12em] text-[var(--color-text-secondary)] anim-fade-up anim-d8" aria-hidden="true">
+      <span className="hidden md:block absolute bottom-10 right-[clamp(1.5rem,4vw,3rem)] z-10 font-mono text-2xs font-light tracking-wider text-text-secondary anim-fade-up anim-d8" aria-hidden="true">
         Made with THREE.JS · REACT · TS
       </span>
     </section>

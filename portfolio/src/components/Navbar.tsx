@@ -1,21 +1,21 @@
 import { useState, useCallback } from 'react'
 
 interface NavbarProps {
-  scrolled:      boolean
+  scrolled: boolean
   activeSection: string
-  onNav:         (id: string) => void
+  onNav: (id: string) => void
 }
 
 interface NavLink {
-  id:    string
+  id: string
   label: string
 }
 
 const NAV_LINKS: NavLink[] = [
-  { id: 'software',   label: 'Software'   },
+  { id: 'projects', label: 'Projects' },
   { id: 'characters', label: '3D / Chars' },
-  { id: 'products',   label: 'Product'    },
-  { id: 'skills',     label: 'Skills'     },
+  { id: 'products', label: 'Product' },
+  { id: 'skills', label: 'Skills' },
 ]
 
 export default function Navbar({ scrolled, activeSection, onNav }: NavbarProps) {
@@ -31,12 +31,12 @@ export default function Navbar({ scrolled, activeSection, onNav }: NavbarProps) 
       {/* ── Nav bar ─────────────────────────────────────────── */}
       <nav
         className={[
-          'fixed top-0 left-0 right-0 z-[100]',
+          'fixed top-0 left-0 right-0 z-100',
           'flex items-center justify-between',
           'px-[clamp(1.5rem,4vw,3rem)] py-6',
-          'transition-all duration-[400ms]',
+          'transition-all duration-400',
           scrolled
-            ? 'bg-[rgba(8,8,8,0.82)] backdrop-blur-[24px] border-b border-[rgba(255,255,255,0.07)]'
+            ? 'bg-bg-overlay backdrop-blur-xl border-b border-border'
             : 'bg-transparent border-b border-transparent',
         ].join(' ')}
         role="navigation"
@@ -48,9 +48,9 @@ export default function Navbar({ scrolled, activeSection, onNav }: NavbarProps) 
           aria-label="Scroll to top"
           className={[
             'cursor-none relative bg-transparent border-0 p-0',
-            'font-[var(--font-display)] font-extrabold text-base uppercase text-[var(--color-accent)]',
-            'after:absolute after:left-0 after:right-0 after:bottom-[-3px] after:h-px after:bg-[var(--color-accent)]',
-            'after:scale-x-0 after:origin-left after:transition-transform after:duration-[250ms]',
+            'font-display font-extrabold text-base uppercase text-accent',
+            'after:absolute after:left-0 after:right-0 after:-bottom-0.75 after:h-px after:bg-accent',
+            'after:scale-x-0 after:origin-left after:transition-transform after:duration-250',
             'hover:after:scale-x-100',
           ].join(' ')}
         >
@@ -68,16 +68,16 @@ export default function Navbar({ scrolled, activeSection, onNav }: NavbarProps) 
                   aria-current={isActive ? 'location' : undefined}
                   className={[
                     'cursor-none relative flex items-center gap-2',
-                    'font-[var(--font-display)] text-[0.6875rem] font-medium tracking-[0.12em] uppercase',
+                    'font-display text-[0.6875rem] font-medium tracking-wider uppercase',
                     'bg-transparent border-0 py-1 px-0',
-                    'transition-colors duration-[250ms]',
-                    'before:absolute before:bottom-[-2px] before:left-0 before:right-0',
-                    'before:h-px before:bg-[var(--color-accent-dim)]',
+                    'transition-colors duration-250',
+                    'before:absolute before:-bottom-0.5 before:left-0 before:right-0',
+                    'before:h-px before:bg-accent-dim',
                     'before:scale-x-0 before:origin-left',
-                    'before:transition-transform before:duration-[400ms]',
+                    'before:transition-transform before:duration-400',
                     isActive
-                      ? 'text-[var(--color-text-primary)] before:scale-x-100'
-                      : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:before:scale-x-100',
+                      ? 'text-text-primary before:scale-x-100'
+                      : 'text-text-secondary hover:text-text-primary hover:before:scale-x-100',
                   ].join(' ')}
                 >
                   {label}
@@ -85,8 +85,8 @@ export default function Navbar({ scrolled, activeSection, onNav }: NavbarProps) 
                   <span
                     aria-hidden="true"
                     className={[
-                      'inline-block w-1 h-1 rounded-full bg-[var(--color-electric)]',
-                      'transition-all duration-[250ms]',
+                      'inline-block w-1 h-1 rounded-full bg-electric',
+                      'transition-all duration-250',
                       isActive ? 'opacity-100 scale-100' : 'opacity-0 scale-0',
                     ].join(' ')}
                   />
@@ -101,12 +101,12 @@ export default function Navbar({ scrolled, activeSection, onNav }: NavbarProps) 
               onClick={() => handleNav('contact')}
               className={[
                 'cursor-none',
-                'font-[var(--font-display)] text-[0.6875rem] font-medium tracking-[0.12em] uppercase',
-                'text-[var(--color-accent)] bg-transparent',
-                'border border-[rgba(255,255,255,0.13)] rounded-[2px]',
+                'font-display text-[0.6875rem] font-medium tracking-wider uppercase',
+                'text-accent bg-transparent',
+                'border border-border-mid rounded-xs',
                 'px-5 py-2',
-                'transition-all duration-[250ms]',
-                'hover:bg-[rgba(232,213,176,0.12)] hover:border-[rgba(232,213,176,0.35)]',
+                'transition-all duration-250',
+                'hover:bg-accent-muted hover:border-accent-border',
               ].join(' ')}
             >
               Contact
@@ -116,25 +116,25 @@ export default function Navbar({ scrolled, activeSection, onNav }: NavbarProps) 
 
         {/* Mobile burger */}
         <button
-          className="cursor-none flex md:hidden flex-col gap-[5px] bg-transparent border-0 p-2 z-[101]"
+          className="cursor-none flex md:hidden flex-col gap-1.25 bg-transparent border-0 p-2 z-101"
           onClick={() => setMenuOpen(prev => !prev)}
           aria-label={menuOpen ? 'Close menu' : 'Open menu'}
           aria-expanded={menuOpen}
         >
           <span className={[
-            'block w-6 h-px bg-[var(--color-text-primary)] origin-center',
-            'transition-transform duration-[400ms] ease-[cubic-bezier(0.4,0,0.2,1)]',
-            menuOpen ? 'translate-y-[6px] rotate-45' : '',
+            'block w-6 h-px bg-text-primary origin-center',
+            'transition-transform duration-400 ease-in-out',
+            menuOpen ? 'translate-y-1.5 rotate-45' : '',
           ].join(' ')} />
           <span className={[
-            'block w-6 h-px bg-[var(--color-text-primary)] origin-center',
-            'transition-all duration-[250ms]',
+            'block w-6 h-px bg-text-primary origin-center',
+            'transition-all duration-250',
             menuOpen ? 'opacity-0 scale-x-0' : 'opacity-100 scale-x-100',
           ].join(' ')} />
           <span className={[
-            'block w-6 h-px bg-[var(--color-text-primary)] origin-center',
-            'transition-transform duration-[400ms] ease-[cubic-bezier(0.4,0,0.2,1)]',
-            menuOpen ? '-translate-y-[6px] -rotate-45' : '',
+            'block w-6 h-px bg-text-primary origin-center',
+            'transition-transform duration-400 ease-in-out',
+            menuOpen ? '-translate-y-1.5 -rotate-45' : '',
           ].join(' ')} />
         </button>
       </nav>
@@ -142,12 +142,12 @@ export default function Navbar({ scrolled, activeSection, onNav }: NavbarProps) 
       {/* ── Mobile drawer ───────────────────────────────────── */}
       <div
         className={[
-          'fixed top-0 right-0 h-dvh z-[99]',
+          'fixed top-0 right-0 h-dvh z-99',
           'w-[min(360px,100vw)]',
           'flex flex-col justify-center',
           'px-10 py-20',
-          'bg-[var(--color-bg-surface)] border-l border-[rgba(255,255,255,0.07)]',
-          'transition-transform duration-[700ms] ease-[cubic-bezier(0.4,0,0.2,1)]',
+          'bg-bg-surface border-l border-border',
+          'transition-transform duration-700 ease-in-out',
           menuOpen ? 'translate-x-0 pointer-events-auto' : 'translate-x-full pointer-events-none',
         ].join(' ')}
         aria-hidden={!menuOpen}
@@ -157,7 +157,7 @@ export default function Navbar({ scrolled, activeSection, onNav }: NavbarProps) 
             <li
               key={id}
               style={{
-                opacity:   menuOpen ? 1 : 0,
+                opacity: menuOpen ? 1 : 0,
                 transform: menuOpen ? 'translateX(0)' : 'translateX(24px)',
                 transition: `opacity 400ms ${i * 60}ms ease, transform 400ms ${i * 60}ms ease`,
               }}
@@ -166,15 +166,15 @@ export default function Navbar({ scrolled, activeSection, onNav }: NavbarProps) 
                 onClick={() => handleNav(id)}
                 className={[
                   'cursor-none flex items-center gap-4 w-full bg-transparent border-0 text-left',
-                  'font-[var(--font-display)] text-2xl font-bold tracking-[-0.02em]',
-                  'py-4 border-b border-[rgba(255,255,255,0.07)]',
-                  'transition-colors duration-[250ms]',
+                  'font-display text-2xl font-bold tracking-tight',
+                  'py-4 border-b border-border',
+                  'transition-colors duration-250',
                   activeSection === id
-                    ? 'text-[var(--color-text-primary)]'
-                    : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]',
+                    ? 'text-text-primary'
+                    : 'text-text-secondary hover:text-text-primary',
                 ].join(' ')}
               >
-                <span className="font-[var(--font-mono)] text-[0.625rem] font-light tracking-[0.12em] text-[var(--color-text-tertiary)]">
+                <span className="font-mono text-2xs font-light tracking-wider text-text-tertiary">
                   0{i + 1}
                 </span>
                 {label}
@@ -184,7 +184,7 @@ export default function Navbar({ scrolled, activeSection, onNav }: NavbarProps) 
 
           <li
             style={{
-              opacity:   menuOpen ? 1 : 0,
+              opacity: menuOpen ? 1 : 0,
               transform: menuOpen ? 'translateX(0)' : 'translateX(24px)',
               transition: `opacity 400ms ${NAV_LINKS.length * 60}ms ease, transform 400ms ${NAV_LINKS.length * 60}ms ease`,
             }}
@@ -193,13 +193,13 @@ export default function Navbar({ scrolled, activeSection, onNav }: NavbarProps) 
               onClick={() => handleNav('contact')}
               className={[
                 'cursor-none flex items-center gap-4 w-full bg-transparent border-0 text-left',
-                'font-[var(--font-display)] text-2xl font-bold tracking-[-0.02em]',
-                'py-4 border-b border-[rgba(255,255,255,0.07)]',
-                'text-[var(--color-accent)] transition-colors duration-[250ms]',
-                'hover:text-[var(--color-accent-dim)]',
+                  'font-display text-2xl font-bold tracking-tight',
+                'py-4 border-b border-border',
+                'text-accent transition-colors duration-250',
+                'hover:text-accent-dim',
               ].join(' ')}
             >
-              <span className="font-[var(--font-mono)] text-[0.625rem] font-light tracking-[0.12em] text-[var(--color-text-tertiary)]">
+              <span className="font-mono text-2xs font-light tracking-wider text-text-tertiary">
                 0{NAV_LINKS.length + 1}
               </span>
               Get in Touch
@@ -212,10 +212,10 @@ export default function Navbar({ scrolled, activeSection, onNav }: NavbarProps) 
           className="mt-auto pt-8 flex flex-col gap-2"
           style={{ opacity: menuOpen ? 1 : 0, transition: 'opacity 400ms 400ms' }}
         >
-          <span className="font-[var(--font-mono)] text-[0.625rem] font-light tracking-[0.12em] text-[var(--color-text-secondary)]">
+          <span className="font-mono text-2xs font-light tracking-wider text-text-secondary">
             hello@axiom.design
           </span>
-          <span className="font-[var(--font-mono)] text-[0.625rem] font-light tracking-[0.12em] text-[var(--color-text-secondary)]">
+          <span className="font-mono text-2xs font-light tracking-wider text-text-secondary">
             @axiom_dev
           </span>
         </div>
@@ -224,7 +224,7 @@ export default function Navbar({ scrolled, activeSection, onNav }: NavbarProps) 
       {/* Backdrop */}
       {menuOpen && (
         <div
-          className="fixed inset-0 z-[98] bg-black/60 backdrop-blur-[4px] anim-fade-up"
+          className="fixed inset-0 z-98 bg-black/60 backdrop-blur-xs anim-fade-up"
           onClick={() => setMenuOpen(false)}
           aria-hidden="true"
         />
