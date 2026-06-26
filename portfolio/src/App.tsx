@@ -5,6 +5,8 @@ import About from "./sections/About";
 import Software from "./sections/Software";
 import VisualDesign from "./sections/VisualDesign";
 import Skills from "./sections/Skills";
+import Contact from "./sections/Contact";
+import Footer from "./components/Footer";
 
 export default function App() {
   // ── Cursor ──────────────────────────────────────────────────────────────────
@@ -63,7 +65,7 @@ export default function App() {
   // ── Active section ──────────────────────────────────────────────────────────
   const [activeSection, setActiveSection] = useState("hero");
   useEffect(() => {
-    const ids = ["hero", "about", "projects", "design", "skills"];
+    const ids = ["hero", "about", "projects", "design", "skills", "contact"];
     const observers = ids.map((id) => {
       const el = document.getElementById(id);
       if (!el) return null;
@@ -117,7 +119,9 @@ export default function App() {
         <Software />
         <VisualDesign />
         <Skills />
+        <Contact />
       </main>
+      <Footer />
     </>
   );
 }
