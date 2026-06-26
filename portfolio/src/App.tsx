@@ -3,6 +3,7 @@ import Navbar from "./components/Navbar";
 import Hero from "./sections/Hero";
 import About from "./sections/About";
 import Software from "./sections/Software";
+import VisualDesign from "./sections/VisualDesign";
 import Skills from "./sections/Skills";
 
 export default function App() {
@@ -62,7 +63,7 @@ export default function App() {
   // ── Active section ──────────────────────────────────────────────────────────
   const [activeSection, setActiveSection] = useState("hero");
   useEffect(() => {
-    const ids = ["hero", "about", "skills"];
+    const ids = ["hero", "about", "projects", "design", "skills"];
     const observers = ids.map((id) => {
       const el = document.getElementById(id);
       if (!el) return null;
@@ -114,6 +115,7 @@ export default function App() {
         <Hero onScrollDown={() => scrollTo("about")} />
         <About />
         <Software />
+        <VisualDesign />
         <Skills />
       </main>
     </>

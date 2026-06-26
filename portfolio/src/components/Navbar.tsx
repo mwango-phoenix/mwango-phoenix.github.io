@@ -13,6 +13,7 @@ interface NavLink {
 
 const NAV_LINKS: NavLink[] = [
   { id: 'projects', label: 'Projects' },
+  { id: 'design', label: 'Design' },
   { id: 'skills', label: 'Skills' },
 ]
 
@@ -79,15 +80,6 @@ export default function Navbar({ scrolled, activeSection, onNav }: NavbarProps) 
                   ].join(' ')}
                 >
                   {label}
-                  {/* Active dot */}
-                  <span
-                    aria-hidden="true"
-                    className={[
-                      'inline-block w-1 h-1 rounded-full bg-electric',
-                      'transition-all duration-250',
-                      isActive ? 'opacity-100 scale-100' : 'opacity-0 scale-0',
-                    ].join(' ')}
-                  />
                 </button>
               </li>
             )
