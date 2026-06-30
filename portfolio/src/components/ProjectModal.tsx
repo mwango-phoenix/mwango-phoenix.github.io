@@ -285,13 +285,35 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
         </div>
 
         {/* ── Sticky footer ─────────────────────────────────── */}
-        <div className="shrink-0 border-t border-border px-8 py-4 md:px-10 flex items-center justify-between bg-bg-surface">
+        <div className="shrink-0 border-t border-border px-8 py-4 md:px-10 flex items-center justify-between gap-4 bg-bg-surface">
           <button
             onClick={onClose}
             className="cursor-none text-[0.625rem] font-light tracking-[0.2em] uppercase text-text-secondary bg-transparent border-0 p-0 transition-colors duration-200 hover:text-[var(--color-text-primary)]"
           >
             ← Back
           </button>
+          {isPrd && project?.links && project.links.length > 0 && (
+            <div className="flex gap-2 flex-wrap justify-end">
+              {project.links.map(({ label, href }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={[
+                    'cursor-none text-[0.6rem] font-bold tracking-[0.12em] uppercase',
+                    'px-4 py-2 rounded-xs',
+                    'bg-accent text-(--color-text-inverse)',
+                    'transition-all duration-200',
+                    'hover:bg-text-primary hover:scale-[1.02]',
+                    'active:scale-[0.97]',
+                  ].join(' ')}
+                >
+                  {label}
+                </a>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </>,

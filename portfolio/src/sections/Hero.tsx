@@ -142,7 +142,6 @@ export default function Hero({ onScrollDown }: HeroProps) {
       cancelAnimationFrame(frameId)
       window.removeEventListener('resize', resize)
       window.removeEventListener('mousemove', onMouseMove)
-      renderer.dispose()
       scene.traverse(obj => {
         if (obj instanceof THREE.Mesh) {
           obj.geometry.dispose()
@@ -150,6 +149,8 @@ export default function Hero({ onScrollDown }: HeroProps) {
           mats.forEach(m => m.dispose())
         }
       })
+      renderer.forceContextLoss()
+      renderer.dispose()
     }
   }, [])
 
