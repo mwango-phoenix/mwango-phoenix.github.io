@@ -30,7 +30,7 @@ const CATEGORIES: Category[] = [
     ],
   },
   {
-    label: "Character Design",
+    label: "GenTube Character Design",
     kind: "sticker",
     thumbnail: headDark,
     pieces: CHARACTERS.map((c) => ({
