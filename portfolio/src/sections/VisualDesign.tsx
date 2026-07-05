@@ -2,18 +2,21 @@ import { useState, useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
 import goose from "../assets/posters/goose.png";
 import soar from "../assets/posters/Soar.png";
+import personalities from "../assets/characters/personalities.png";
+import { CHARACTERS } from "../assets/characters";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface DesignPiece {
   title: string;
   type: "image" | "video";
   src?: string;
-  // Character Design only: additional assets shown in the modal
-  assets?: string[];
+  // Optional one-line explanation shown in the lightbox caption.
+  note?: string;
 }
 
 interface Category {
   label: string;
+  kind?: "sticker"; 
   pieces: DesignPiece[];
 }
 
@@ -26,17 +29,16 @@ const CATEGORIES: Category[] = [
       { title: "Soar", type: "image", src: soar },
     ],
   },
-  // {
-  //   label: "Character Design",
-  //   pieces: [
-  //     {
-  //       title: "Character Name",
-  //       type: "image",
-  //       src: characterThumb, // shown in the accordion grid
-  //       assets: [sheet1, sheet2, detail1], // shown in the modal
-  //     },
-  //   ],
-  // },
+  {
+    label: "Character Design",
+    kind: "sticker",
+    pieces: CHARACTERS.map((c) => ({
+      title: c.title,
+      type: "image" as const,
+      src: c.src,
+      note: c.note,
+    })),
+  },
   // {
   //   label: "Brand Identity",
   //   pieces: [],
@@ -47,38 +49,55 @@ const CATEGORIES: Category[] = [
   // },
 ];
 
-// ─── Character modal ──────────────────────────────────────────────────────────
-function CharacterModal({
-  piece,
+// ─── Sticker lightbox ─────────────────────────────────────────────────────────
+function StickerLightbox({
+  pieces,
+  startIndex,
   onClose,
 }: {
-  piece: DesignPiece;
+  pieces: DesignPiece[];
+  startIndex: number;
   onClose: () => void;
 }) {
-  const allImages = [piece.src, ...(piece.assets ?? [])].filter(
-    Boolean,
-  ) as string[];
+  const [currentIndex, setCurrentIndex] = useState(startIndex);
+  const total = pieces.length;
 
-  // Escape to close + body scroll lock
+  const goPrev = useCallback(
+    () => setCurrentIndex((i) => (i - 1 + total) % total),
+    [total],
+  );
+  const goNext = useCallback(
+    () => setCurrentIndex((i) => (i + 1) % total),
+    [total],
+  );
+
+  // Body scroll lock — runs once so the scroll position is captured and
+  // restored exactly once (avoids scrolling to top when handlers change).
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
     const scrollY = window.scrollY;
     document.body.style.overflow = "hidden";
     document.body.style.position = "fixed";
     document.body.style.top = `-${scrollY}px`;
     document.body.style.width = "100%";
-    window.addEventListener("keydown", onKey);
     return () => {
-      window.removeEventListener("keydown", onKey);
       document.body.style.overflow = "";
       document.body.style.position = "";
       document.body.style.top = "";
       document.body.style.width = "";
       window.scrollTo(0, scrollY);
     };
-  }, [onClose]);
+  }, []);
+
+  // Keyboard nav + Escape
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+      else if (e.key === "ArrowLeft") goPrev();
+      else if (e.key === "ArrowRight") goNext();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose, goPrev, goNext]);
 
   const onBackdrop = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
@@ -87,135 +106,248 @@ function CharacterModal({
     [onClose],
   );
 
+  const piece = pieces[currentIndex];
+
   return createPortal(
     <div
       onClick={onBackdrop}
-      className="fixed inset-0 z-200 bg-black/75 backdrop-blur-[6px] flex items-center justify-center p-4 md:p-8"
+      className="fixed inset-0 z-200 bg-black/85 backdrop-blur-[6px] flex flex-col items-center justify-center p-4 md:p-8"
     >
-      <div className="relative w-full max-w-4xl max-h-[90dvh] flex flex-col bg-bg-surface rounded-xs shadow-[0_32px_80px_rgba(0,0,0,0.7)] overflow-hidden">
-        {/* Header */}
-        <div className="shrink-0 flex items-center justify-between gap-4 px-8 py-5 border-b border-border">
-          <div className="flex flex-col gap-0.5">
-            <p className="font-mono text-2xs font-light tracking-label uppercase text-electric opacity-60">
-              Character Design
-            </p>
-            <h2 className="font-display text-lg font-bold tracking-tight text-text-primary">
-              {piece.title}
-            </h2>
-          </div>
+      {/* Close */}
+      <button
+        onClick={onClose}
+        aria-label="Close"
+        className={[
+          "cursor-none absolute top-5 right-5 z-10",
+          "w-9 h-9 flex items-center justify-center",
+          "border border-border-mid rounded-xs text-text-secondary",
+          "transition-all duration-200 hover:border-[rgba(255,255,255,0.3)] hover:text-text-primary",
+        ].join(" ")}
+      >
+        <svg
+          width="12"
+          height="12"
+          viewBox="0 0 12 12"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+        >
+          <line x1="1" y1="1" x2="11" y2="11" />
+          <line x1="11" y1="1" x2="1" y2="11" />
+        </svg>
+      </button>
+   
+      <div className="flex items-center gap-4 md:gap-8 w-full justify-center">
+        {total > 1 && (
           <button
-            onClick={onClose}
-            aria-label="Close"
+            onClick={goPrev}
+            aria-label="Previous"
             className={[
-              "cursor-none shrink-0 w-9 h-9 flex items-center justify-center",
-              "border border-border-mid rounded-xs text-text-secondary",
-              "transition-all duration-200 hover:border-[rgba(255,255,255,0.3)] hover:text-text-primary",
+              "cursor-none shrink-0 w-10 h-10 flex items-center justify-center",
+              "border border-border-mid rounded-full text-text-secondary",
+              "transition-all duration-200 hover:border-electric hover:text-electric",
             ].join(" ")}
           >
             <svg
-              width="12"
-              height="12"
-              viewBox="0 0 12 12"
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
               fill="none"
               stroke="currentColor"
               strokeWidth="1.5"
               strokeLinecap="round"
+              strokeLinejoin="round"
             >
-              <line x1="1" y1="1" x2="11" y2="11" />
-              <line x1="11" y1="1" x2="1" y2="11" />
+              <polyline points="10,3 5,8 10,13" />
             </svg>
           </button>
-        </div>
+        )}
 
-        {/* Scrollable asset grid */}
-        <div
-          className="flex-1 overflow-y-auto overscroll-contain p-6"
-          style={{
-            scrollbarWidth: "thin",
-            scrollbarColor: "rgba(255,255,255,0.1) transparent",
-          }}
-        >
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {allImages.map((src, i) => (
-              <img
-                key={i}
-                src={src}
-                alt={i === 0 ? piece.title : `${piece.title} — asset ${i}`}
-                loading="lazy"
-                className={[
-                  "w-full object-contain bg-bg-base",
-                  i === 0 && allImages.length % 2 !== 0 ? "sm:col-span-2" : "",
-                ].join(" ")}
-              />
-            ))}
-          </div>
+        <img
+          src={piece.src}
+          alt={piece.title}
+          className="max-h-[75dvh] max-w-[75vw] object-contain"
+        />
+
+        {total > 1 && (
+          <button
+            onClick={goNext}
+            aria-label="Next"
+            className={[
+              "cursor-none shrink-0 w-10 h-10 flex items-center justify-center",
+              "border border-border-mid rounded-full text-text-secondary",
+              "transition-all duration-200 hover:border-electric hover:text-electric",
+            ].join(" ")}
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <polyline points="6,3 11,8 6,13" />
+            </svg>
+          </button>
+        )}
+      </div>
+
+      {/* Caption */}
+      <div className="mt-6 flex flex-col items-center gap-2">
+        <div className="flex items-center gap-3">
+          <span className="font-display text-sm font-bold tracking-tight text-text-primary">
+            {piece.title}
+          </span>
+          <span className="font-mono text-2xs font-light tracking-label text-electric opacity-60">
+            {currentIndex + 1} / {total}
+          </span>
         </div>
+        {piece.note && (
+          <p className="font-mono text-2xs font-light leading-relaxed text-text-secondary max-w-md text-center">
+            {piece.note}
+          </p>
+        )}
       </div>
     </div>,
     document.body,
   );
 }
 
-// ─── Piece thumbnail ──────────────────────────────────────────────────────────
-function PieceThumbnail({
-  piece,
-  isCharacter,
+// ─── Character showcase (horizontal carousel) ──────────────────────────────────
+function CharacterShowcase({
+  pieces,
+  feature,
 }: {
-  piece: DesignPiece;
-  isCharacter?: boolean;
+  pieces: DesignPiece[];
+  feature: string;
 }) {
-  const [modalOpen, setModalOpen] = useState(false);
-  if (!piece.src) return null;
-
-  const content =
-    piece.type === "image" ? (
-      <img
-        src={piece.src}
-        alt={piece.title}
-        loading="lazy"
-        className="w-full max-h-[260px] object-contain bg-bg-surface"
-      />
-    ) : (
-      <video
-        src={piece.src}
-        controls
-        playsInline
-        className="w-full max-h-[260px] bg-black"
-      />
-    );
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const shown = pieces.filter((p) => p.src);
 
   return (
     <>
-      <div className="flex flex-col gap-2">
-        {isCharacter ? (
-          <button
-            onClick={() => setModalOpen(true)}
-            className={[
-              "cursor-none group relative block w-full text-left border-0 p-0",
-              "transition-opacity duration-200 hover:opacity-80",
-            ].join(" ")}
-            aria-label={`View ${piece.title} assets`}
+      {/* Drag hint */}
+      <div className="flex items-center gap-2 mb-4">
+        <span className="font-mono text-2xs font-light tracking-label uppercase text-text-secondary opacity-40">
+          Drag to explore
+        </span>
+        <span className="text-text-secondary opacity-40" aria-hidden="true">
+          <svg
+            width="20"
+            height="10"
+            viewBox="0 0 20 10"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           >
-            {content}
-            {/* View all overlay */}
-            <span className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-black/40">
-              <span className="font-mono text-2xs tracking-label uppercase text-white">
-                View all assets ↗
-              </span>
-            </span>
-          </button>
-        ) : (
-          content
-        )}
-        <p className="font-mono text-2xs font-light text-text-secondary">
-          {piece.title}
-        </p>
+            <line x1="0" y1="5" x2="17" y2="5" />
+            <polyline points="13,1 18,5 13,9" />
+          </svg>
+        </span>
       </div>
 
-      {modalOpen && isCharacter && (
-        <CharacterModal piece={piece} onClose={() => setModalOpen(false)} />
+      <div className="relative">
+        <div
+          className="flex items-start md:items-center gap-4 overflow-x-auto pb-4 -mx-1 px-1"
+          style={{ scrollbarWidth: "thin", scrollbarColor: "rgba(255,255,255,0.1) transparent" }}
+        >
+          <div className="snap-start shrink-0 w-[min(88%,620px)] flex flex-col gap-4 p-4">
+            <img
+              src={feature}
+              alt="Character personalities"
+              className="w-full object-contain rounded-xs"
+            />
+            <div className="flex flex-col gap-2">
+              <p className="font-mono text-2xs font-light tracking-label uppercase text-electric">
+                The Cast
+              </p>
+              <h4 className="font-display text-lg font-bold tracking-tight text-text-primary">
+                Meet the Personalities
+              </h4>
+              <p className="font-mono text-xs font-light leading-relaxed text-text-secondary">
+                A mascot system with distinct personalities, each with its
+                own poses and props. Tap any sticker to take a closer look.
+              </p>
+            </div>
+          </div>
+
+          {/* Individual sticker cards */}
+          {shown.map((piece, i) => (
+            <button
+              key={i}
+              onClick={() => setLightboxIndex(i)}
+              aria-label={`View ${piece.title}`}
+              className={[
+                "cursor-none group snap-start shrink-0 w-40 flex flex-col gap-2",
+                "bg-transparent border-0 p-0 text-left",
+              ].join(" ")}
+            >
+              <div
+                className={[
+                  "relative aspect-square overflow-hidden rounded-xs",
+                  "border border-border",
+                  "transition-all duration-300 ease-out",
+                  i % 2 ? "rotate-1" : "-rotate-1",
+                  "group-hover:rotate-0 group-hover:scale-105 group-hover:border-electric",
+                ].join(" ")}
+              >
+                <img
+                  src={piece.src}
+                  alt={piece.title}
+                  loading="lazy"
+                  className="w-full h-full object-contain p-2"
+                />
+              </div>
+              <p className="font-mono text-2xs font-light tracking-label text-text-secondary group-hover:text-text-primary transition-colors duration-200">
+                {piece.title}
+              </p>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {lightboxIndex !== null && (
+        <StickerLightbox
+          pieces={shown}
+          startIndex={lightboxIndex}
+          onClose={() => setLightboxIndex(null)}
+        />
       )}
     </>
+  );
+}
+
+// ─── Piece thumbnail (non-sticker categories) ──────────────────────────────────
+function PieceThumbnail({ piece }: { piece: DesignPiece }) {
+  if (!piece.src) return null;
+
+  return (
+    <div className="flex flex-col gap-2">
+      {piece.type === "image" ? (
+        <img
+          src={piece.src}
+          alt={piece.title}
+          loading="lazy"
+          className="w-full max-h-[260px] object-contain bg-bg-surface"
+        />
+      ) : (
+        <video
+          src={piece.src}
+          controls
+          playsInline
+          className="w-full max-h-[260px] bg-black"
+        />
+      )}
+      <p className="font-mono text-2xs font-light text-text-secondary">
+        {piece.title}
+      </p>
+    </div>
   );
 }
 
@@ -232,7 +364,6 @@ function AccordionRow({
   onToggle: () => void;
 }) {
   const count = category.pieces.filter((p) => p.src).length;
-  const isCharacter = category.label === "Character Design";
 
   return (
     <div className="border-b border-border">
@@ -292,21 +423,21 @@ function AccordionRow({
       {/* Collapsible body */}
       <div
         className="overflow-hidden transition-all duration-500 ease-in-out"
-        style={{ maxHeight: open ? "1200px" : "0px" }}
+        style={{ maxHeight: open ? "1600px" : "0px" }}
       >
         <div className="pb-8">
-          {category.pieces.some((p) => p.src) ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {category.pieces
-                .filter((p) => p.src)
-                .map((piece, i) => (
-                  <PieceThumbnail
-                    key={i}
-                    piece={piece}
-                    isCharacter={isCharacter}
-                  />
-                ))}
-            </div>
+          {count > 0 ? (
+            category.kind === "sticker" ? (
+              <CharacterShowcase pieces={category.pieces} feature={personalities} />
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {category.pieces
+                  .filter((p) => p.src)
+                  .map((piece, i) => (
+                    <PieceThumbnail key={i} piece={piece} />
+                  ))}
+              </div>
+            )
           ) : (
             <div className="h-24 flex items-center">
               <span className="font-mono text-2xs tracking-label uppercase text-text-secondary opacity-30">
