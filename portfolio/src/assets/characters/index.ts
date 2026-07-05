@@ -17,6 +17,7 @@ import bob from "./bob.png";
 import sleep from "./sleep.png";
 import surf from "./surf.png";
 import gentube from "./gentube.png";
+import pirategt from "./pirate-gt.png";
 
 export interface CharacterSticker {
   title: string;
@@ -28,12 +29,13 @@ export { headDark };
 
 export const CHARACTERS: CharacterSticker[] = [
   { title: "Paintbrush", src: paintbrush },
-  { title: "Spacewalk", src: space },
+  { title: "Astronaut", src: space },
   { title: "Bug Hunter", src: bug },
-  { title: "Energy", src: energy },
+  { title: "Energy Booster", src: energy },
   { title: "Head (Light)", src: headLight },
   { title: "Head (Dark)", src: headDark },
   { title: "Pirate", src: pirate },
+  { title: "Peg-leg", src: pirategt },
   { title: "Six Seven", src: sixtySeven },
   { title: "Flowers", src: flowers },
   { title: "Zen", src: zen },
@@ -43,5 +45,5 @@ export const CHARACTERS: CharacterSticker[] = [
   { title: "Painter", src: bob },
   { title: "Sleep", src: sleep },
   { title: "Surf", src: surf },
-  { title: "GenTube", src: gentube },
+  { title: "GenTube Gallery", src: gentube },
 ];
