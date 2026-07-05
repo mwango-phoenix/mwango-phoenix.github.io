@@ -24,6 +24,7 @@ export interface CharacterSticker {
   // Optional one-line explanation shown in the lightbox caption.
   note?: string;
 }
+export { headDark };
 
 export const CHARACTERS: CharacterSticker[] = [
   { title: "Paintbrush", src: paintbrush },
