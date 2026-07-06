@@ -266,13 +266,12 @@ export default function Hero() {
                 </span>{" "}
                 who builds full-stack systems by day and explores game design,
                 3D art, and cybersecurity in my free time. I enjoy building
-                products from the ground up — working across engineering,
-                design, and product to turn ideas into experiences people
-                genuinely enjoy using.
+                products from the ground up working across engineering,
+                design, and product.
               </p>
             </div>
 
-            <div className="reveal reveal-d2 flex flex-wrap gap-2">
+            <div className="reveal reveal-d2 flex flex-wrap gap-2 justify-center">
               {TECH.map((tech) => (
                 <span
                   key={tech}

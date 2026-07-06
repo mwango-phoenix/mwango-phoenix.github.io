@@ -7,6 +7,10 @@
   color: var(--color-electric);
 }
 
+p {
+  text-wrap: pretty;
+}
+
 .hero-tagline {
   font-weight: 300;
   font-size: var(--text-md);
