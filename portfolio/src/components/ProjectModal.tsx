@@ -7,6 +7,7 @@ export interface ProjectDetail {
   title:      string
   tags:       string[]
   overview:   string
+  thumbnail?: string     // card background image (see ProjectCard)
   // Standard content sections (used for most projects)
   sections?:  { heading: string; body: string }[]
   links?:     { label: string; href: string }[]
@@ -22,19 +23,7 @@ interface ProjectModalProps {
 // ─── Close button ─────────────────────────────────────────────────────────────
 function CloseBtn({ onClick }: { onClick: () => void }) {
   return (
-    <button
-      onClick={onClick}
-      aria-label="Close project"
-      className={[
-        'cursor-none flex-shrink-0',
-        'w-9 h-9 flex items-center justify-center',
-        'border border-[rgba(255,255,255,0.13)] rounded-xs',
-        'text-text-secondary',
-        'transition-all duration-[200ms]',
-        'hover:border-[rgba(255,255,255,0.3)] hover:text-text-primary',
-        'active:scale-95',
-      ].join(' ')}
-    >
+    <button onClick={onClick} aria-label="Close project" className="icon-btn">
       <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
         <line x1="1" y1="1" x2="11" y2="11" />
         <line x1="11" y1="1" x2="1" y2="11" />
@@ -75,17 +64,17 @@ function StandardContent({ project }: { project: ProjectDetail }) {
     <div className="flex flex-col gap-10 px-8 py-10 md:px-12 md:py-12">
 
       {/* Overview */}
-      <p className="font-(--font-serif) text-[1.125rem] leading-[1.75] text-text-secondary" style={{ fontStyle: 'italic' }}>
+      <p className="font-(--font-serif) text-[1.125rem] leading-[1.75] text-text-secondary text-pretty" style={{ fontStyle: 'italic' }}>
         {project.overview}
       </p>
 
       {/* Sections */}
       {project.sections?.map(({ heading, body }) => (
-        <div key={heading} className="flex flex-col gap-3 pt-8 border-t border-[rgba(255,255,255,0.07)]">
-          <p className="text-[0.625rem] font-light tracking-[0.28em] uppercase text-electric">
+        <div key={heading} className="flex flex-col gap-3 pt-8 border-t border-border">
+          <p className="text-2xs font-light tracking-label uppercase text-electric">
             {heading}
           </p>
-          <p className="text-[0.75rem] font-light leading-[1.95] text-text-secondary">
+          <p className="text-[0.75rem] font-light leading-[1.95] text-text-secondary text-pretty">
             {body}
           </p>
         </div>
@@ -93,22 +82,9 @@ function StandardContent({ project }: { project: ProjectDetail }) {
 
       {/* Links */}
       {project.links && project.links.length > 0 && (
-        <div className="flex gap-3 flex-wrap pt-8 border-t border-[rgba(255,255,255,0.07)]">
+        <div className="flex gap-3 flex-wrap pt-8 border-t border-border">
           {project.links.map(({ label, href }) => (
-            <a
-              key={label}
-              href={href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={[
-                'cursor-none text-[0.6875rem] font-bold tracking-[0.12em] uppercase',
-                'px-6 py-3 rounded-xs',
-                'bg-accent text-(--color-text-inverse)',
-                'transition-all duration-200',
-                'hover:bg-text-primary hover:scale-[1.02]',
-                'active:scale-[0.97]',
-              ].join(' ')}
-            >
+            <a key={label} href={href} target="_blank" rel="noopener noreferrer" className="btn-cta">
               {label}
             </a>
           ))}
@@ -194,7 +170,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
         ref={overlayRef}
         onClick={onBackdropClick}
         aria-hidden="true"
-        className="fixed inset-0 z-[200] bg-black/70 backdrop-blur-[6px]"
+        className="fixed inset-0 z-200 bg-black/70 backdrop-blur-[6px]"
         style={{
           opacity:    isOpen ? 1 : 0,
           transition: 'opacity 350ms cubic-bezier(0,0,0.2,1)',
@@ -209,12 +185,12 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
         aria-label={project?.title ?? 'Project detail'}
         ref={panelRef}
         className={[
-          'fixed z-[201]',
+          'fixed z-201',
           'top-1/2 left-1/2',
           'w-[min(680px,calc(100vw-2rem))]',
-          'bg-[var(--color-bg-surface)] flex flex-col',
+          'bg-bg-surface flex flex-col',
           'shadow-[0_32px_80px_rgba(0,0,0,0.7)]',
-          'rounded-[2px]',
+          'rounded-xs',
         ].join(' ')}
         style={{
           maxHeight:  '88dvh',
@@ -228,21 +204,18 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
         // Desktop overrides via inline — panel always slides from right on md+
       >
         {/* ── Sticky header ─────────────────────────────────── */}
-        <div className="flex-shrink-0 flex items-start justify-between gap-4 px-8 py-6 md:px-10 border-b border-[rgba(255,255,255,0.07)] bg-[var(--color-bg-surface)]">
+        <div className="shrink-0 flex items-start justify-between gap-4 px-8 py-6 md:px-10 border-b border-border bg-bg-surface">
           <div className="flex flex-col gap-1.5 min-w-0">
-            <p className="text-[0.5625rem] font-light tracking-[0.28em] uppercase text-[var(--color-electric)]">
+            <p className="text-[0.5625rem] font-light tracking-label uppercase text-electric">
               {project?.num}
             </p>
-            <h2 className="font-[var(--font-display)] text-[1.25rem] font-bold tracking-[-0.01em] leading-snug text-[var(--color-text-primary)] truncate">
+            <h2 className="font-display text-[1.25rem] font-bold tracking-[-0.01em] leading-snug text-text-primary truncate">
               {project?.title}
             </h2>
             {/* Tags */}
             <div className="flex flex-wrap gap-1.5 mt-1">
               {project?.tags.map(tag => (
-                <span
-                  key={tag}
-                  className="text-[0.5625rem] font-light tracking-[0.1em] uppercase px-2 py-0.5 border border-[rgba(255,255,255,0.13)] rounded-[2px] text-text-secondary"
-                >
+                <span key={tag} className="chip chip--sm">
                   {tag}
                 </span>
               ))}
@@ -263,8 +236,8 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
                 <>
                   {/* PRD overview above the slides */}
                   {project.overview && (
-                    <div className="px-8 py-4 md:px-6 border-b border-[rgba(255,255,255,0.07)]">
-                      <p className="font-(--font-serif) text-[1rem] leading-[1.75] text-text-secondary">
+                    <div className="px-8 py-4 md:px-6 border-b border-border">
+                      <p className="font-(--font-serif) text-[1rem] leading-[1.75] text-text-secondary text-pretty">
                         {project.overview}
                       </p>
                     </div>
@@ -288,27 +261,14 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
         <div className="shrink-0 border-t border-border px-8 py-4 md:px-10 flex items-center justify-between gap-4 bg-bg-surface">
           <button
             onClick={onClose}
-            className="cursor-none text-[0.625rem] font-light tracking-[0.2em] uppercase text-text-secondary bg-transparent border-0 p-0 transition-colors duration-200 hover:text-[var(--color-text-primary)]"
+            className="cursor-none text-2xs font-light tracking-[0.2em] uppercase text-text-secondary bg-transparent border-0 p-0 transition-colors duration-200 hover:text-text-primary"
           >
             ← Back
           </button>
           {isPrd && project?.links && project.links.length > 0 && (
             <div className="flex gap-2 flex-wrap justify-end">
               {project.links.map(({ label, href }) => (
-                <a
-                  key={label}
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={[
-                    'cursor-none text-[0.6rem] font-bold tracking-[0.12em] uppercase',
-                    'px-4 py-2 rounded-xs',
-                    'bg-accent text-(--color-text-inverse)',
-                    'transition-all duration-200',
-                    'hover:bg-text-primary hover:scale-[1.02]',
-                    'active:scale-[0.97]',
-                  ].join(' ')}
-                >
+                <a key={label} href={href} target="_blank" rel="noopener noreferrer" className="btn-cta btn-cta--sm">
                   {label}
                 </a>
               ))}

@@ -1,18 +1,14 @@
 import { useState } from 'react'
 import ProjectModal, { type ProjectDetail } from '../components/ProjectModal'
 import ProjectCard from '../components/ProjectCard'
-import fitkit1 from '../assets/fitkit/1.png'
-import fitkit2 from '../assets/fitkit/2.png'
-import fitkit3 from '../assets/fitkit/3.png'
-import fitkit4 from '../assets/fitkit/4.png'
-import luminate1 from '../assets/luminate/1.png'
-import luminate2 from '../assets/luminate/2.png'
+import { fitkit, luminate, campusEats } from '../assets/projects'
+
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface Project {
   title: string
   desc: string
   tags: string[]
-  wide?: boolean
+  thumbnail?: string
   links?: { label: string; href: string }[]
   prdImages?: string[]
   prdAlt?: string
@@ -25,8 +21,8 @@ const PROJECTS: Project[] = [
     title: 'FitKit',
     desc: 'A multi-sport workout planning platform with structured plans, gym workout builders, and cardio tools. This project dives into the research, UX design, and technical architecture building a unified fitness platform for many needs.',
     tags: ['TypeScript', 'React Native', 'Figma', 'Mobile Development'],
-    wide: true,
-    prdImages: [fitkit1, fitkit2, fitkit3, fitkit4],
+    thumbnail: fitkit.thumbnail,
+    prdImages: fitkit.prd,
     prdAlt: 'FitKit document',
     links: [{ label: 'View Figma', href: 'https://www.figma.com/design/vuFJKkrqU7ovBCDRUmCkmq/FitKit?node-id=31-849&t=bt5MaSsm25D0qhgH-1' }, { label: 'View GitHub', href: 'https://github.com/mwango-phoenix/FitKit'}],
   },
@@ -34,9 +30,18 @@ const PROJECTS: Project[] = [
     title: 'Luminate',
     desc: 'A community-driven platform that re-imagines online art challenges as inspiring creative experiences.',
     tags: ['Figma', 'UI/UX Design', 'Web Development'],
-    prdImages: [luminate1, luminate2],
+    thumbnail: luminate.thumbnail,
+    prdImages: luminate.prd,
     prdAlt: 'Luminate document',
     links: [{ label: 'View Figma', href: 'https://www.figma.com/design/hOAKAkKE7tkDBcRk8tjbTJ/Luminate?node-id=0-1&t=bt5MaSsm25D0qhgH-1' }],
+  },
+  {
+    title: 'CampusEats',
+    desc: 'A food ordering app built for campus dining halls and cafes, surfacing full nutrition facts alongside every menu item so students can order confidently and eat with intention.',
+    tags: ['Figma', 'UI/UX Design', 'Mobile Development'],
+    thumbnail: campusEats.thumbnail,
+    prdImages: campusEats.prd,
+    prdAlt: 'CampusEats document',
   },
 ]
 
@@ -74,6 +79,7 @@ export default function Projects() {
               title: project.title,
               tags: project.tags,
               overview: project.desc,
+              thumbnail: project.thumbnail,
               links: project.links,
               prdImages: project.prdImages,
               prdAlt: project.prdAlt,
@@ -87,7 +93,6 @@ export default function Projects() {
                   i === 2 ? 'reveal-d2' : '',
                   i === 3 ? 'reveal-d1' : '',
                   i === 4 ? 'reveal-d2' : '',
-                  project.wide ? 'md:col-span-2' : '',
                 ].join(' ')}
               >
                 <ProjectCard project={projectDetail} num={num} onClick={() => setActive(projectDetail)} />

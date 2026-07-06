@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import Navbar from "./components/Navbar";
 import Hero from "./sections/Hero";
-import About from "./sections/About";
 import Software from "./sections/Software";
 import VisualDesign from "./sections/VisualDesign";
 import Skills from "./sections/Skills";
@@ -114,8 +113,7 @@ export default function App() {
       />
 
       <main>
-        <Hero onScrollDown={() => scrollTo("about")} />
-        <About />
+        <Hero />
         <Software />
         <VisualDesign />
         <Skills />

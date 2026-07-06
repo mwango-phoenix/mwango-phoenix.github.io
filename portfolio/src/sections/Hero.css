@@ -1,0 +1,91 @@
+.eyebrow {
+  font-family: var(--font-mono);
+  font-weight: 300;
+  font-size: var(--text-2xs);
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--color-electric);
+}
+
+.hero-tagline {
+  font-weight: 300;
+  font-size: var(--text-md);
+  letter-spacing: 0.06em;
+  color: var(--color-text-secondary);
+  max-width: 30rem;
+  text-wrap: pretty;
+}
+
+.hero-btn-outline {
+  cursor: none;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.75rem 2rem;
+  border-radius: 2px;
+  background: transparent;
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border-mid);
+  transition: all 250ms;
+}
+.hero-btn-outline:hover {
+  color: var(--color-text-primary);
+  border-color: var(--color-border-strong);
+}
+.hero-btn-outline:active {
+  transform: scale(0.97);
+}
+
+.hero-scroll-hint {
+  cursor: none;
+  position: absolute;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  border: 0;
+  padding: 0.5rem;
+  transition: opacity 250ms;
+}
+.hero-scroll-hint:hover {
+  opacity: 0.7;
+}
+
+.hero-scroll-hint__label {
+  font-size: var(--text-2xs);
+  font-weight: 300;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+
+.hero-scroll-hint__line {
+  display: block;
+  width: 1px;
+  height: 3rem;
+}
+
+.hero-corner-meta {
+  position: absolute;
+  bottom: 2.5rem;
+  right: clamp(1.5rem, 4vw, 3rem);
+  z-index: 10;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-weight: 300;
+  letter-spacing: 0.06em;
+  color: var(--color-text-secondary);
+}
+
+.about-bio {
+  font-family: var(--font-serif);
+  font-size: clamp(1.125rem, 2vw, 1.375rem);
+  color: var(--color-text-secondary);
+  text-wrap: pretty;
+}

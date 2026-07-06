@@ -75,12 +75,7 @@ function StickerLightbox({
       <button
         onClick={onClose}
         aria-label="Close"
-        className={[
-          "cursor-none absolute top-5 right-5 z-10",
-          "w-9 h-9 flex items-center justify-center",
-          "border border-border-mid rounded-xs text-text-secondary",
-          "transition-all duration-200 hover:border-[rgba(255,255,255,0.3)] hover:text-text-primary",
-        ].join(" ")}
+        className="icon-btn absolute top-5 right-5 z-10"
       >
         <svg
           width="12"
@@ -98,15 +93,7 @@ function StickerLightbox({
 
       <div className="flex items-center gap-4 md:gap-8 w-full justify-center">
         {total > 1 && (
-          <button
-            onClick={goPrev}
-            aria-label="Previous"
-            className={[
-              "cursor-none shrink-0 w-10 h-10 flex items-center justify-center",
-              "border border-border-mid rounded-full text-text-secondary",
-              "transition-all duration-200 hover:border-electric hover:text-electric",
-            ].join(" ")}
-          >
+          <button onClick={goPrev} aria-label="Previous" className="icon-btn icon-btn--round">
             <svg
               width="16"
               height="16"
@@ -129,15 +116,7 @@ function StickerLightbox({
         />
 
         {total > 1 && (
-          <button
-            onClick={goNext}
-            aria-label="Next"
-            className={[
-              "cursor-none shrink-0 w-10 h-10 flex items-center justify-center",
-              "border border-border-mid rounded-full text-text-secondary",
-              "transition-all duration-200 hover:border-electric hover:text-electric",
-            ].join(" ")}
-          >
+          <button onClick={goNext} aria-label="Next" className="icon-btn icon-btn--round">
             <svg
               width="16"
               height="16"
@@ -165,7 +144,7 @@ function StickerLightbox({
           </span>
         </div>
         {piece.note && (
-          <p className="font-mono text-2xs font-light leading-relaxed text-text-secondary max-w-md text-center">
+          <p className="font-mono text-2xs font-light leading-relaxed text-text-secondary text-pretty max-w-md text-center">
             {piece.note}
           </p>
         )}
@@ -233,7 +212,7 @@ export default function CharacterShowcase({
               <h4 className="font-display text-lg font-bold tracking-tight text-text-primary">
                 {title}
               </h4>
-              <p className="font-mono text-xs font-light leading-relaxed text-text-secondary">
+              <p className="font-mono text-xs font-light leading-relaxed text-text-secondary text-pretty">
                 {description}
               </p>
             </div>
