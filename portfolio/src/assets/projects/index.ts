@@ -17,6 +17,8 @@ import campusEats3 from '../campusEats/3.png'
 import campusEats4 from '../campusEats/4.png'
 import campusEatsThumbnail from '../campusEats/CampusEats.png'
 
+import budgetBuoyThumbnail from '../budgetBuoy/budgetBuoy.png'
+
 export const fitkit = {
   thumbnail: fitkitThumbnail,
   prd: [fitkit1, fitkit2, fitkit3, fitkit4],
@@ -30,4 +32,9 @@ export const luminate = {
 export const campusEats = {
   thumbnail: campusEatsThumbnail,
   prd: [campusEats1, campusEats2, campusEats3, campusEats4],
+}
+
+export const budgetBuoy = {
+  thumbnail: budgetBuoyThumbnail,
+  prd: [],
 }

@@ -1,11 +1,17 @@
-import { type ProjectDetail } from './ProjectModal'
+export interface ProjectCardData {
+  title:      string
+  tags:       string[]
+  overview:   string
+  thumbnail?: string
+  hasDetail?: boolean   // true if clicking opens a PRD slideshow or case study
+  detailLabel?: string  // chip text, e.g. "Project Details ↗" or "Case Study ↗"
+}
 
 export default function ProjectCard({ project, num, onClick }: {
-  project: ProjectDetail
+  project: ProjectCardData
   num: string
   onClick: () => void
 }) {
-  const hasPrd = !!(project.prdImages && project.prdImages.length > 0)
   const hasThumbnail = !!project.thumbnail
 
   return (
@@ -68,9 +74,9 @@ export default function ProjectCard({ project, num, onClick }: {
               {tag}
             </span>
           ))}
-          {hasPrd && (
+          {project.hasDetail && (
             <span className="chip chip--accent">
-              Project Details ↗
+              {project.detailLabel ?? 'View Details ↗'}
             </span>
           )}
         </div>

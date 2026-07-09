@@ -1,9 +1,18 @@
 import { useState } from 'react'
+import type React from 'react'
 import ProjectModal, { type ProjectDetail } from '../components/ProjectModal'
-import ProjectCard from '../components/ProjectCard'
-import { fitkit, luminate, campusEats } from '../assets/projects'
+import CaseStudyModal, { type CaseStudyMeta } from '../components/CaseStudyModal'
+import ProjectCard, { type ProjectCardData } from '../components/ProjectCard'
+import { fitkit, luminate, campusEats, budgetBuoy } from '../assets/projects'
+import BudgetBuoyCaseStudy from '../case-studies/budgetBuoy'
+import { budgetBuoyMeta } from '../case-studies/budgetBuoy.meta'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
+interface CaseStudy {
+  meta:      CaseStudyMeta
+  Component: React.ComponentType
+}
+
 interface Project {
   title: string
   desc: string
@@ -12,11 +21,18 @@ interface Project {
   links?: { label: string; href: string }[]
   prdImages?: string[]
   prdAlt?: string
+  caseStudy?: CaseStudy
 }
-
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 const PROJECTS: Project[] = [
+  {
+    title: 'Budget Buoy',
+    desc: 'A mobile-first simple expense tracker that helps you record income and expenses, visualize your spending, and understand where your money goes with clear, real-time insights.',
+    tags: ['React Native', 'Expo Router', 'TypeScript', 'MongoDB'],
+    thumbnail: budgetBuoy.thumbnail,
+    caseStudy: { meta: budgetBuoyMeta, Component: BudgetBuoyCaseStudy },
+  },
   {
     title: 'FitKit',
     desc: 'A multi-sport workout planning platform with structured plans, gym workout builders, and cardio tools. This project dives into the research, UX design, and technical architecture building a unified fitness platform for many needs.',
@@ -47,7 +63,9 @@ const PROJECTS: Project[] = [
 
 // ─── Section ──────────────────────────────────────────────────────────────────
 export default function Projects() {
-  const [active, setActive] = useState<ProjectDetail | null>(null)
+  const [activeProject, setActiveProject]     = useState<ProjectDetail | null>(null)
+  const [activeCaseStudy, setActiveCaseStudy] = useState<CaseStudy | null>(null)
+
   return (
     <section
       id="projects"
@@ -74,16 +92,36 @@ export default function Projects() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-border">
           {PROJECTS.map((project, i) => {
             const num = String(i + 1).padStart(2, '0')
-            const projectDetail: ProjectDetail = {
-              num,
+            const hasPrd = !!(project.prdImages && project.prdImages.length > 0)
+            const hasCaseStudy = !!project.caseStudy
+
+            const cardData: ProjectCardData = {
               title: project.title,
               tags: project.tags,
               overview: project.desc,
               thumbnail: project.thumbnail,
-              links: project.links,
-              prdImages: project.prdImages,
-              prdAlt: project.prdAlt,
+              hasDetail: hasPrd || hasCaseStudy,
+              detailLabel: hasCaseStudy ? 'Case Study ↗' : 'Project Details ↗',
             }
+
+            const handleClick = () => {
+              if (hasCaseStudy) {
+                setActiveCaseStudy(project.caseStudy!)
+              } else {
+                const projectDetail: ProjectDetail = {
+                  num,
+                  title: project.title,
+                  tags: project.tags,
+                  overview: project.desc,
+                  thumbnail: project.thumbnail,
+                  links: project.links,
+                  prdImages: project.prdImages,
+                  prdAlt: project.prdAlt,
+                }
+                setActiveProject(projectDetail)
+              }
+            }
+
             return (
               <div
                 key={num}
@@ -95,14 +133,21 @@ export default function Projects() {
                   i === 4 ? 'reveal-d2' : '',
                 ].join(' ')}
               >
-                <ProjectCard project={projectDetail} num={num} onClick={() => setActive(projectDetail)} />
+                <ProjectCard project={cardData} num={num} onClick={handleClick} />
               </div>
             )
           })}
         </div>
 
       </div>
-      <ProjectModal project={active} onClose={() => setActive(null)} />
+      <ProjectModal project={activeProject} onClose={() => setActiveProject(null)} />
+      <CaseStudyModal
+        isOpen={!!activeCaseStudy}
+        onClose={() => setActiveCaseStudy(null)}
+        meta={activeCaseStudy?.meta ?? { eyebrowLabel: '', metaLine: '', ariaLabel: '' }}
+      >
+        {activeCaseStudy && <activeCaseStudy.Component />}
+      </CaseStudyModal>
     </section>
   )
 }
