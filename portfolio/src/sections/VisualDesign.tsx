@@ -2,8 +2,9 @@ import { useState } from "react";
 import goose from "../assets/posters/goose.png";
 import soar from "../assets/posters/Soar.png";
 import personalities from "../assets/characters/personalities.png";
-import { CHARACTERS, headDark } from "../assets/characters";
+import { CHARACTERS, headDark, piperFront, piperLeft, piperDown, piperPlush, piperFullPin, piperMinimalPin } from "../assets/characters";
 import CharacterShowcase from "../components/CharacterShowcase";
+import PiperShowcase from "../components/PiperShowcase";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface DesignPiece {
@@ -15,10 +16,14 @@ interface DesignPiece {
 
 interface Category {
   label: string;
-  kind?: "sticker";
+  kind?: "sticker" | "mascot";
   thumbnail?: string;
   pieces: DesignPiece[];
+  // "mascot" kind extras
+  mascotFeature?: string;
+  mascotEyebrow?: string;
 }
+
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 const CATEGORIES: Category[] = [
@@ -39,6 +44,45 @@ const CATEGORIES: Category[] = [
       src: c.src,
       note: c.note,
     })),
+  },
+  {
+    label: "Piper — MathSoc Mascot",
+    kind: "mascot",
+    thumbnail: piperFront,
+    mascotFeature: piperFront,
+    mascotEyebrow: "Owl · Brand Mascot · Character Art",
+    pieces: [
+      {
+        title: "Front",
+        type: "image",
+        src: piperFront,
+      },
+      {
+        title: "Side View",
+        type: "image",
+        src: piperLeft,
+      },
+      {
+        title: "Laying Down",
+        type: "image",
+        src: piperDown,
+      },
+      {
+        title: "Plush",
+        type: "image",
+        src: piperPlush,
+      },
+      {
+        title: "Full Pin",
+        type: "image",
+        src: piperFullPin,
+      },
+      {
+        title: "Minimal Pin",
+        type: "image",
+        src: piperMinimalPin,
+      },
+    ],
   },
   // {
   //   label: "Brand Identity",
@@ -172,6 +216,14 @@ function AccordionRow({
                   .filter((p) => p.src)
                   .map((p) => ({ title: p.title, src: p.src!, note: p.note }))}
                 feature={personalities}
+              />
+            ) : category.kind === "mascot" && category.mascotFeature ? (
+              <PiperShowcase
+                feature={category.mascotFeature}
+                assets={category.pieces
+                  .filter((p) => p.src)
+                  .map((p) => ({ title: p.title, src: p.src!, note: p.note }))}
+                eyebrow={category.mascotEyebrow}
               />
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

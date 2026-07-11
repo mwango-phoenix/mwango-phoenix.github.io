@@ -19,6 +19,14 @@ import surf from "./surf.png";
 import gentube from "./gentube.png";
 import pirategt from "./pirate-gt.png";
 
+// ─── Piper (owl brand mascot) ─────────────────────────────────────────────────
+import piperFront from "./piper-front.png";
+import piperLeft from "./piper-left.png";
+import piperDown from "./piper-down.png";
+import piperPlush from "./piper-plush.jpg";
+import piperFullPin from "./piper-pin-full.jpg";
+import piperMinimalPin from "./piper-minimal.jpg";
+
 export interface CharacterSticker {
   title: string;
   src: string;
@@ -26,6 +34,8 @@ export interface CharacterSticker {
   note?: string;
 }
 export { headDark };
+
+export { piperFront, piperLeft, piperDown, piperPlush, piperFullPin, piperMinimalPin };
 
 export const CHARACTERS: CharacterSticker[] = [
   { title: "Paintbrush", src: paintbrush },

@@ -1,158 +1,9 @@
-import { useState, useEffect, useCallback } from "react";
-import { createPortal } from "react-dom";
+import { useState } from "react";
+import Lightbox from "./Lightbox";
+import type { LightboxItem } from "./Lightbox";
 
-// ─── Types ────────────────────────────────────────────────────────────────────
-export interface ShowcasePiece {
-  title: string;
-  src: string;
-  // Optional one-line explanation shown in the lightbox caption.
-  note?: string;
-}
-
-// ─── Sticker lightbox ─────────────────────────────────────────────────────────
-function StickerLightbox({
-  pieces,
-  startIndex,
-  onClose,
-}: {
-  pieces: ShowcasePiece[];
-  startIndex: number;
-  onClose: () => void;
-}) {
-  const [currentIndex, setCurrentIndex] = useState(startIndex);
-  const total = pieces.length;
-
-  const goPrev = useCallback(
-    () => setCurrentIndex((i) => (i - 1 + total) % total),
-    [total],
-  );
-  const goNext = useCallback(
-    () => setCurrentIndex((i) => (i + 1) % total),
-    [total],
-  );
-
-  useEffect(() => {
-    const scrollY = window.scrollY;
-    document.body.style.overflow = "hidden";
-    document.body.style.position = "fixed";
-    document.body.style.top = `-${scrollY}px`;
-    document.body.style.width = "100%";
-    return () => {
-      document.body.style.overflow = "";
-      document.body.style.position = "";
-      document.body.style.top = "";
-      document.body.style.width = "";
-      window.scrollTo(0, scrollY);
-    };
-  }, []);
-
-  // Keyboard nav + Escape
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-      else if (e.key === "ArrowLeft") goPrev();
-      else if (e.key === "ArrowRight") goNext();
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [onClose, goPrev, goNext]);
-
-  const onBackdrop = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
-      if (e.target === e.currentTarget) onClose();
-    },
-    [onClose],
-  );
-
-  const piece = pieces[currentIndex];
-
-  return createPortal(
-    <div
-      onClick={onBackdrop}
-      className="fixed inset-0 z-200 bg-black/85 backdrop-blur-[6px] flex flex-col items-center justify-center p-4 md:p-8"
-    >
-      {/* Close */}
-      <button
-        onClick={onClose}
-        aria-label="Close"
-        className="icon-btn absolute top-5 right-5 z-10"
-      >
-        <svg
-          width="12"
-          height="12"
-          viewBox="0 0 12 12"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-        >
-          <line x1="1" y1="1" x2="11" y2="11" />
-          <line x1="11" y1="1" x2="1" y2="11" />
-        </svg>
-      </button>
-
-      <div className="flex items-center gap-4 md:gap-8 w-full justify-center">
-        {total > 1 && (
-          <button onClick={goPrev} aria-label="Previous" className="icon-btn icon-btn--round">
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <polyline points="10,3 5,8 10,13" />
-            </svg>
-          </button>
-        )}
-
-        <img
-          src={piece.src}
-          alt={piece.title}
-          className="max-h-[75dvh] max-w-[75vw] object-contain"
-        />
-
-        {total > 1 && (
-          <button onClick={goNext} aria-label="Next" className="icon-btn icon-btn--round">
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <polyline points="6,3 11,8 6,13" />
-            </svg>
-          </button>
-        )}
-      </div>
-
-      {/* Caption */}
-      <div className="mt-6 flex flex-col items-center gap-2">
-        <div className="flex items-center gap-3">
-          <span className="font-display text-sm font-bold tracking-tight text-text-primary">
-            {piece.title}
-          </span>
-          <span className="font-mono text-2xs font-light tracking-label text-electric opacity-60">
-            {currentIndex + 1} / {total}
-          </span>
-        </div>
-        {piece.note && (
-          <p className="font-mono text-2xs font-light leading-relaxed text-text-secondary text-pretty max-w-md text-center">
-            {piece.note}
-          </p>
-        )}
-      </div>
-    </div>,
-    document.body,
-  );
-}
+// Re-export so existing callers don't break.
+export type ShowcasePiece = LightboxItem;
 
 // ─── Character showcase (horizontal carousel) ──────────────────────────────────
 export default function CharacterShowcase({
@@ -218,7 +69,6 @@ export default function CharacterShowcase({
             </div>
           </div>
 
-          {/* Individual sticker cards */}
           {pieces.map((piece, i) => (
             <button
               key={i}
@@ -254,8 +104,8 @@ export default function CharacterShowcase({
       </div>
 
       {lightboxIndex !== null && (
-        <StickerLightbox
-          pieces={pieces}
+        <Lightbox
+          items={pieces}
           startIndex={lightboxIndex}
           onClose={() => setLightboxIndex(null)}
         />
