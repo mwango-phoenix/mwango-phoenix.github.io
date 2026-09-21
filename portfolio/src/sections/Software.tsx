@@ -6,6 +6,8 @@ import ProjectCard, { type ProjectCardData } from '../components/ProjectCard'
 import { fitkit, luminate, campusEats, budgetBuoy } from '../assets/projects'
 import BudgetBuoyCaseStudy from '../case-studies/budgetBuoy'
 import { budgetBuoyMeta } from '../case-studies/budgetBuoy.meta'
+import KeepsakeCaseStudy from '../case-studies/keepsake'
+import { keepsakeMeta } from '../case-studies/keepsake.meta'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface CaseStudy {
@@ -32,6 +34,12 @@ const PROJECTS: Project[] = [
     tags: ['React Native', 'Expo Router', 'TypeScript', 'MongoDB'],
     thumbnail: budgetBuoy.thumbnail,
     caseStudy: { meta: budgetBuoyMeta, Component: BudgetBuoyCaseStudy },
+  },
+  {
+    title: 'Keepsake',
+    desc: 'An Android home screen photo widget built with Jetpack Glance — pick photos, drop the widget on your launcher, and it rotates through them on a battery-aware schedule.',
+    tags: ['Kotlin', 'Jetpack Compose', 'Glance Widgets', 'WorkManager'],
+    caseStudy: { meta: keepsakeMeta, Component: KeepsakeCaseStudy },
   },
   {
     title: 'FitKit',
@@ -74,7 +82,7 @@ export default function Projects() {
       <div className="px-[clamp(1.5rem,4vw,3rem)] max-w-360 mx-auto">
 
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-6 mb-16 reveal">
+        <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-6 mb-16 reveal max-w-280 mx-auto">
           <div className="flex flex-col gap-4">
             <p className="font-mono text-2xs font-light tracking-label uppercase text-electric">
               Projects

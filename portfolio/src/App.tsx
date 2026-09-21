@@ -114,8 +114,8 @@ export default function App() {
 
       <main>
         <Hero />
-        <Software />
         <VisualDesign />
+        <Software />
         <Skills />
         <Contact />
       </main>

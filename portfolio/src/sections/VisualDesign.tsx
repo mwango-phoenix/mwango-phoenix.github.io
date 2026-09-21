@@ -105,14 +105,14 @@ function PieceThumbnail({ piece }: { piece: DesignPiece }) {
           src={piece.src}
           alt={piece.title}
           loading="lazy"
-          className="w-full max-h-[260px] object-contain bg-bg-surface"
+          className="w-full max-h-65 object-contain bg-bg-surface"
         />
       ) : (
         <video
           src={piece.src}
           controls
           playsInline
-          className="w-full max-h-[260px] bg-black"
+          className="w-full max-h-65 bg-black"
         />
       )}
       <p className="font-mono text-2xs font-light text-text-secondary">
@@ -259,15 +259,13 @@ export default function VisualDesign() {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-2 mb-12 reveal">
           <div className="flex flex-col gap-3">
-            <p className="font-mono text-2xs font-light tracking-label uppercase text-electric">
-              Design
-            </p>
             <h2 className="font-display font-bold text-[clamp(2.25rem,4vw,3.5rem)] tracking-tight">
               Visual Design
             </h2>
           </div>
-          <p className="font-mono text-md font-light leading-[1.9] text-text-secondary max-w-95">
-            Posters, motion, and graphic work.
+          <p className="font-mono text-md font-light leading-[1.9] text-text-secondary max-w-145">
+            Illustration, mascot design, and more taken from rough concept to finished asset, 
+            staying consistent across formats from posters to plush toys to pins.
           </p>
         </div>
 

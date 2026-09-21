@@ -24,9 +24,9 @@ export default function CharacterShowcase({
   return (
     <>
       {/* Drag hint */}
-      <div className="flex items-center gap-2 mb-4">
+      <div className="flex items-center gap-2 mb-2">
         <span className="font-mono text-2xs font-light tracking-label uppercase text-text-secondary opacity-40">
-          Drag to explore
+          Explore
         </span>
         <span className="text-text-secondary opacity-40" aria-hidden="true">
           <svg

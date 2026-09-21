@@ -159,7 +159,7 @@ export default function BudgetBuoyCaseStudy() {
               <h3 className="font-(--font-display) text-[16px] m-0 mt-2 mb-2 text-text-primary">
                 {label}
               </h3>
-              <p className="m-0 text-[13px] text-text-secondary leading-relaxed max-w-[40ch] text-pretty mx-auto">
+              <p className="m-0 text-md text-text-secondary leading-relaxed max-w-[40ch] text-pretty mx-auto">
                 {body}
               </p>
             </div>
