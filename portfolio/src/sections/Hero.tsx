@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
+import selfie from "../assets/selfie.png";
 import "./Hero.css";
 
 interface OrbiterConfig {
@@ -45,11 +46,12 @@ const TECH = [
   "TypeScript",
   "React",
   "Three.js",
-  "JavaScript",
   "Python",
   "C++",
   "C#",
   "Blender",
+  "Adobe Illustrator",
+  "Figma"
 ];
 
 export default function Hero() {
@@ -248,27 +250,34 @@ export default function Hero() {
           aria-hidden="true"
         />
 
-        <div className="relative z-10 flex flex-col items-center gap-5 pt-3 max-w-225">
+        <div className="relative z-10 flex flex-col items-center gap-3 pt-3 max-w-225">
           <p className="eyebrow anim-fade-up anim-d1">
             Software · Cybersecurity · Product Design
           </p>
 
-          <p className="hero-tagline anim-fade-up anim-d3">
-            Turning ideas into products through code, design, and curiosity.
-          </p>
-
           <div className="px-[clamp(1.5rem,4vw,3rem)] max-w-360 mx-auto flex flex-col gap-8">
-            <div className="reveal flex flex-col gap-4">
-              <p className="about-bio">
-                I'm a{" "}
-                <span className="text-text-primary">
-                  creative developer and 3D artist
-                </span>{" "}
-                who builds full-stack systems by day and explores game design,
-                3D art, and cybersecurity in my free time. I enjoy building
-                products from the ground up working across engineering,
-                design, and product.
-              </p>
+            <div className="reveal flex flex-col md:flex-row items-center gap-5 text-left">
+              <div className="flex flex-col gap-4 flex-1">
+                <p className="hero-tagline anim-fade-up anim-d3">
+                  Turning ideas into products through code, design, and
+                  curiosity.
+                </p>
+                <p className="about-bio">
+                  I'm a{" "}
+                  <span className="text-text-primary">
+                    software developer and designer
+                  </span>{" "}
+                  who builds full-stack systems by day and explores game
+                  design, 3D art, and cybersecurity in my free time. I enjoy
+                  building products from the ground up working across
+                  engineering, design, and product.
+                </p>
+              </div>
+              <img
+                src={selfie}
+                alt="Abstract self-portrait"
+                className="w-48 h-auto shrink-0 object-contain rounded-sm p-1"
+              />
             </div>
 
             <div className="reveal reveal-d2 flex flex-wrap gap-2 justify-center">
