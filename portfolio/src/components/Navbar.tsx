@@ -32,7 +32,7 @@ export default function Navbar({ scrolled, activeSection, onNav }: NavbarProps) 
         className={[
           'fixed top-0 left-0 right-0 z-100',
           'flex items-center justify-between',
-          'px-[clamp(1.5rem,4vw,3rem)] py-6',
+          'h-[var(--nav-h)] px-[clamp(1.5rem,4vw,3rem)]',
           'transition-all duration-400',
           scrolled
             ? 'bg-bg-overlay backdrop-blur-xl border-b border-border'

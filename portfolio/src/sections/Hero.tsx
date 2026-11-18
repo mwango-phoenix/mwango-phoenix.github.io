@@ -239,7 +239,7 @@ export default function Hero() {
       aria-label="Hero and about"
     >
       {/* ── Intro — first viewport ────────────────────────────────────── */}
-      <div className="relative h-dvh min-h-150 w-full flex flex-col items-center justify-center text-center gap-3 px-[clamp(1.5rem,4vw,3rem)]">
+      <div className="relative min-h-dvh w-full flex flex-col items-center justify-center text-center gap-3 px-[clamp(1.5rem,4vw,3rem)] pt-[calc(var(--nav-h)+1.5rem)] pb-28">
         <canvas
           ref={canvasRef}
           className="absolute inset-0 w-full h-full block"
