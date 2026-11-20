@@ -1,6 +1,10 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import selfie from "../assets/selfie.png";
+import city from "../assets/city.png";
+import phoenix from "../assets/phoenix.png";
+import pride from "../assets/pride.png";
+import Carousel, { type CarouselSlide } from "../components/Carousel";
 import "./Hero.css";
 
 interface OrbiterConfig {
@@ -51,7 +55,14 @@ const TECH = [
   "C#",
   "Blender",
   "Adobe Illustrator",
-  "Figma"
+  "Figma",
+];
+
+const HERO_SLIDES: CarouselSlide[] = [
+  { src: selfie, alt: "Self-portrait" },
+  { src: city, alt: "Cityscape" },
+  { src: phoenix, alt: "Phoenix" },
+  { src: pride, alt: "Pride scenery" },
 ];
 
 export default function Hero() {
@@ -273,11 +284,7 @@ export default function Hero() {
                   engineering, design, and product.
                 </p>
               </div>
-              <img
-                src={selfie}
-                alt="Abstract self-portrait"
-                className="w-48 h-auto shrink-0 object-contain rounded-sm p-1"
-              />
+              <Carousel slides={HERO_SLIDES} />
             </div>
 
             <div className="reveal reveal-d2 flex flex-wrap gap-2 justify-center">
