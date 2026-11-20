@@ -27,6 +27,17 @@ import piperPlush from "./piper-plush.jpg";
 import piperFullPin from "./piper-pin-full.jpg";
 import piperMinimalPin from "./piper-minimal.jpg";
 
+// overlay items
+import wink from "./wink.png";
+import wink2 from "./wink2.png";
+import calc from "./calc.png";
+import coocoo from "./coocoo.png";
+import cozy from "./cozy.png";
+import owl from "./owl.png";
+import puddle from "./puddle.png";
+import pug from "./pug.png";
+import teddy from "./teddy.png";
+
 export interface CharacterSticker {
   title: string;
   src: string;
@@ -56,4 +67,16 @@ export const CHARACTERS: CharacterSticker[] = [
   { title: "Sleep", src: sleep },
   { title: "Surf", src: surf },
   { title: "GenTube Gallery", src: gentube },
+];
+
+export const OVERLAYS: CharacterSticker[] = [
+  { title: "Wink", src: wink },
+  { title: "Wink 2", src: wink2 },
+  { title: "Calculator", src: calc },
+  { title: "Coocoo", src: coocoo },
+  { title: "Cozy", src: cozy },
+  { title: "Owl", src: owl },
+  { title: "Puddle", src: puddle },
+  { title: "Pug", src: pug },
+  { title: "Teddy", src: teddy },
 ];

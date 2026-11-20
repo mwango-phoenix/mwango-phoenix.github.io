@@ -6,6 +6,7 @@ import VisualDesign from "./sections/VisualDesign";
 import Skills from "./sections/Skills";
 import Contact from "./sections/Contact";
 import Footer from "./components/Footer";
+import StickerField from "./components/StickerField";
 
 export default function App() {
   // ── Cursor ──────────────────────────────────────────────────────────────────
@@ -27,10 +28,15 @@ export default function App() {
       if ((e.target as Element).closest("a,button,[data-hover]"))
         ringRef.current?.classList.remove("is-hovering");
     };
-    const tick = () => {
+    const FOLLOW_MS = 45;
+    let last = 0;
+    const tick = (now: number) => {
       const m = mouse.current;
-      m.rx += (m.x - m.rx) * 0.14;
-      m.ry += (m.y - m.ry) * 0.14;
+      const dt = last === 0 ? 16 : Math.min(now - last, 64);
+      last = now;
+      const k = 1 - Math.exp(-dt / FOLLOW_MS);
+      m.rx += (m.x - m.rx) * k;
+      m.ry += (m.y - m.ry) * k;
       if (cursorRef.current) {
         cursorRef.current.style.left = `${m.x}px`;
         cursorRef.current.style.top = `${m.y}px`;
@@ -112,14 +118,18 @@ export default function App() {
         onNav={scrollTo}
       />
 
-      <main>
-        <Hero />
-        <VisualDesign />
-        <Software />
-        <Skills />
-        <Contact />
-      </main>
-      <Footer />
+      <div className="relative">
+        {/* floating stickers around page */}
+        <StickerField />
+        <main>
+          <Hero />
+          <VisualDesign />
+          <Software />
+          <Skills />
+          <Contact />
+        </main>
+        <Footer />
+      </div>
     </>
   );
 }

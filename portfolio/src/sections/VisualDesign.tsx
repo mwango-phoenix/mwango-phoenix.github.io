@@ -2,9 +2,12 @@ import { useState } from "react";
 import goose from "../assets/posters/goose.png";
 import soar from "../assets/posters/Soar.png";
 import personalities from "../assets/characters/personalities.png";
-import { CHARACTERS, headDark, piperFront, piperLeft, piperDown, piperPlush, piperFullPin, piperMinimalPin } from "../assets/characters";
+import { CHARACTERS, piperFront, piperLeft, piperDown, piperPlush, piperFullPin, piperMinimalPin } from "../assets/characters";
 import CharacterShowcase from "../components/CharacterShowcase";
 import PiperShowcase from "../components/PiperShowcase";
+
+const characterSrc = (title: string) =>
+  CHARACTERS.find((c) => c.title === title)?.src;
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface DesignPiece {
@@ -17,7 +20,8 @@ interface DesignPiece {
 interface Category {
   label: string;
   kind?: "sticker" | "mascot";
-  thumbnail?: string;
+  // Curated artwork shown as a small fan while the row is collapsed.
+  previews?: (string | undefined)[];
   pieces: DesignPiece[];
   // "mascot" kind extras
   mascotFeature?: string;
@@ -29,6 +33,7 @@ interface Category {
 const CATEGORIES: Category[] = [
   {
     label: "Posters",
+    previews: [goose, soar],
     pieces: [
       { title: "Goose", type: "image", src: goose },
       { title: "Soar", type: "image", src: soar },
@@ -37,7 +42,12 @@ const CATEGORIES: Category[] = [
   {
     label: "GenTube Character Design",
     kind: "sticker",
-    thumbnail: headDark,
+    previews: [
+      characterSrc("Paintbrush"),
+      characterSrc("Pirate"),
+      characterSrc("DJ"),
+      characterSrc("Flowers"),
+    ],
     pieces: CHARACTERS.map((c) => ({
       title: c.title,
       type: "image" as const,
@@ -48,7 +58,7 @@ const CATEGORIES: Category[] = [
   {
     label: "Piper — MathSoc Mascot",
     kind: "mascot",
-    thumbnail: piperFront,
+    previews: [piperFront, piperPlush, piperFullPin],
     mascotFeature: piperFront,
     mascotEyebrow: "Owl · Brand Mascot · Character Art",
     pieces: [
@@ -122,6 +132,50 @@ function PieceThumbnail({ piece }: { piece: DesignPiece }) {
   );
 }
 
+// ─── Collapsed-row sticker fan ────────────────────────────────────────────────
+function StickerFan({
+  previews,
+  open,
+}: {
+  previews?: (string | undefined)[];
+  open: boolean;
+}) {
+  const srcs = (previews ?? []).filter((s): s is string => Boolean(s));
+  if (srcs.length === 0) return null;
+
+  return (
+    <span
+      aria-hidden="true"
+      className={[
+        "hidden sm:flex shrink-0 items-center ml-auto mr-4",
+        "transition-opacity duration-300 ease-in-out",
+        open ? "opacity-0 pointer-events-none" : "opacity-100",
+      ].join(" ")}
+    >
+      {srcs.map((src, i) => (
+        <span
+          key={src}
+          className={[
+            "w-12 h-12 -ml-3 first:ml-0 rounded-xs overflow-hidden",
+            "border border-border bg-bg-surface",
+            "transition-transform duration-300 ease-out",
+            i % 2 ? "rotate-6" : "-rotate-6",
+            "group-hover:rotate-0 group-hover:-translate-y-0.5",
+            i > 1 ? "hidden md:block" : "block",
+          ].join(" ")}
+        >
+          <img
+            src={src}
+            alt=""
+            loading="lazy"
+            className="w-full h-full object-contain p-1"
+          />
+        </span>
+      ))}
+    </span>
+  );
+}
+
 // ─── Accordion row ────────────────────────────────────────────────────────────
 function AccordionRow({
   category,
@@ -152,17 +206,6 @@ function AccordionRow({
             {String(index + 1).padStart(2, "0")}
           </span>
 
-          {category.thumbnail && (
-            <span className="shrink-0 w-9 h-9 rounded-xs overflow-hidden border border-border bg-black">
-              <img
-                src={category.thumbnail}
-                alt=""
-                aria-hidden="true"
-                className="w-full h-full object-contain p-1"
-              />
-            </span>
-          )}
-
           <h3
             className={[
               "font-display text-base font-bold tracking-tight",
@@ -180,6 +223,8 @@ function AccordionRow({
             </span>
           )}
         </div>
+
+        <StickerFan previews={category.previews} open={open} />
 
         <span
           aria-hidden="true"
